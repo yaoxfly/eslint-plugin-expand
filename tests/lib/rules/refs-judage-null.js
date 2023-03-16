@@ -15,20 +15,37 @@ const rule = require("../../../lib/rules/refs-judage-null"),
 //------------------------------------------------------------------------------
 // Tests
 //------------------------------------------------------------------------------
-
 const ruleTester = new RuleTester();
 ruleTester.run("refs-judage-null", rule, {
-  //验证通过的
+  // success
   valid: [
     // give me some code that won't trigger a warning
-    `this.$refs.ff && this.$refs.ff`,
-    `true && this.$refs.ff && this.$refs.ff`
+    `this.$refs.ff && this.$refs.ff.gg()`,
+    `true && this.$refs.ff && this.$refs.ff.gg()`,
+    ` if(true && this.$refs.aa && this.$refs.bb && true ) {
+        this.$refs.aa.gg()
+        this.$refs.bb.gg()
+      }`
   ],
 
-  //验证失败的
+  // error
   invalid: [
     {
-      code: "true && true && this.$refs.ggg && this.$refs.ggg.aa()",
+      code:
+        ` if( true && this.$refs.aa && this.$refs.bb && true ) {
+            this.$refs.aa.gg()
+            this.$refs.bb.gg()
+            this.$refs.bb.gg()
+            this.$refs.cc.gg()
+          }`,
+      errors: [{ message: "Fill me in.", type: "Me too" }],
+    },
+    {
+      code: `this.$refs.cc.gg()`,
+      errors: [{ message: "Fill me in.", type: "Me too" }],
+    },
+    {
+      code: `true && this.$refs.cc.gg()`,
       errors: [{ message: "Fill me in.", type: "Me too" }],
     },
   ],
