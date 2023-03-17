@@ -1,6 +1,6 @@
 {
   "name": "@yaoxfly/eslint-plugin-expand",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Custom eslint rules",
   "keywords": [
     "eslint",
